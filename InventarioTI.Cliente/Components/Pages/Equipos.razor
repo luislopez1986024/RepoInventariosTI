@@ -1,0 +1,53 @@
+﻿@page "/equipos"
+@using InventarioTI.Shared.Models
+@inject HttpClient Http
+
+<h3>Lista de Equipos</h3>
+
+@if (equipos == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Placa</th>
+                <th>Serial</th>
+                <th>Fecha Creación</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in equipos)
+            {
+                <tr>
+                    <td>@e.Id_Equip</td>
+                    <td>@e.Placa</td>
+                    <td>@e.Serial</td>
+                    <td>@e.Fecha_Creacion.ToString("yyyy-MM-dd")</td>
+                    <td>@(e.Estado ? "Activo" : "Inactivo")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Equipo>? equipos;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // ✅ Aquí solo usas el endpoint relativo porque ya tienes BaseAddress configurado en Program.cs
+            equipos = await Http.GetFromJsonAsync<List<Equipo>>("api/Equipos");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error al cargar equipos: {ex.Message}");
+        }
+    }
+}

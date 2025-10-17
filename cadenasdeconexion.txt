@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=DESKTOP-BP8S587;Database=inventarioti_bd;User Id=sa;Password=1152692741;TrustServerCertificate=True;"
+  }
+}

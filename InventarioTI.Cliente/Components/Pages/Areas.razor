@@ -1,0 +1,46 @@
+﻿@page "/areas"
+@using InventarioTI.Shared.Models
+@inject HttpClient Http
+
+<h3>Lista Areas</h3>
+
+@if (areas == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id Area</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Fecha Creacion</th>
+                <th>Fecha Fin</th>
+                <th>Centro_costos</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var a in areas)
+            {
+                <tr>
+                    <td>@a.Id_Area</td>
+                    <td>@a.Nombre</td>
+                    <td>@(a.Estado ? "Activo" : "Inactivo")</td>
+                    <td>@a.Fecha_Creacion.ToString("yyyy-MM-dd")</td>
+                    <td>@(a.Fecha_Fin == default(DateTime) ? "N/A" : a.Fecha_Fin.ToString("yyyy-MM-dd"))</td>
+                    <td>@a.Centro_costos</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+)
+
+@code {
+    private List<Area>? areas;
+
+
+
+}

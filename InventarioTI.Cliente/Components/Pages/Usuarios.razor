@@ -1,0 +1,58 @@
+﻿@page "/usuario"
+@using InventarioTI.Shared.Models
+@inject HttpClient Http
+
+<h3>Lista de Usuario</h3>
+
+@if (usuarios == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Correo</th>
+                <th>Estado</th>
+                <th>Fecha Creación</th>
+                <th>Fecha Fin</th>
+                <th>Tipo Usuario</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var u in usuarios)
+            {
+                <tr>
+                    <td>@u.Id_Usuarios</td>
+                    <td>@u.Nombre</td>
+                    <td>@u.Apellidos</td>
+                    <td>@u.Correo</td>
+                    <td>@(u.Estado == null ? "Sin estado" : (u.Estado.Value ? "Activo" : "Inactivo"))</td>
+                    <td>@u.Fecha_Creacion?.ToString("yyyy-MM-dd")</td>
+                    <td>@u.Fecha_Fin?.ToString("yyyy-MM-dd")</td>
+                    <td>@u.Id_TipoU</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Usuario>? usuarios;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            usuarios = await Http.GetFromJsonAsync<List<Usuario>>("api/Usuarios");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"❌ Error al cargar usuarios: {ex.Message}");
+        }
+    }
+}

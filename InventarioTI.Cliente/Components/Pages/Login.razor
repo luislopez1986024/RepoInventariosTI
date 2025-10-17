@@ -1,0 +1,55 @@
+﻿@page "/login"
+@using InventarioTI.Shared.DTOs
+@inject HttpClient Http
+@inject NavigationManager Nav
+
+<h3>Iniciar Sesión</h3>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<EditForm Model="loginModel" OnValidSubmit="HandleLogin" FormName="formLogin" Enchaced="false">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="mb-3">
+        <label for="correo" class="form-label">Correo</label>
+        <InputText id="correo" class="form-control" @bind-Value="loginModel.Correo" />
+    </div>
+
+    <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        <InputText id="password" type="password" class="form-control" @bind-Value="loginModel.Contraseña" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+</EditForm>
+
+@code {
+    private UsuarioLoginDto loginModel = new();
+    private string? errorMessage;
+
+    private async Task HandleLogin()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("http://localhost:5000/api/Usuarios", loginModel);
+
+
+            if (response.IsSuccessStatusCode)
+            {
+                Nav.NavigateTo("/");
+            }
+            else
+            {
+                errorMessage = "Correo o contraseña incorrectos.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error al conectar con el servidor: {ex.Message}";
+        }
+    }
+}
